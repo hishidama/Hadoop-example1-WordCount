@@ -1,0 +1,17 @@
+drop table if exists input;
+
+create external table input
+(
+	text STRING
+)
+stored as textfile
+--XXX location 'example1/input/'
+location '/home/asakusa/ws_hadoop1/wordcount/sh/example1/input/'
+--location '/user/hdfs/example1/input/'
+;
+
+insert overwrite directory 'example1/hiveout/'
+select concat(s.word, '\t', count(*)) from (
+	select explode(split(text, '[ \t]+')) word from input
+) s
+group by s.word;

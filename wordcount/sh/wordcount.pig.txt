@@ -1,0 +1,6 @@
+rmf $DST
+a = load '$SRC' as (text:chararray);
+b = foreach a generate flatten(TOKENIZE(text)) as word;
+c = group b by word;
+d = foreach c generate group as word, COUNT(b) as count;
+store d into '$DST' using PigStorage('\t');

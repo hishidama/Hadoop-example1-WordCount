@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/usr/lib/hadoop/hadoop-0.20.2-cdh3u2-core.jar"/>
+	<classpathentry kind="lib" path="/usr/local/cascading-1.2.5-hadoop-0.19.2+/cascading-core-1.2.5.jar" sourcepath="/usr/local/cascading-1.2.5-hadoop-0.19.2+/src"/>
+	<classpathentry kind="lib" path="/usr/local/cascading-1.2.5-hadoop-0.19.2+/lib/janino-2.5.16.jar"/>
+	<classpathentry kind="lib" path="/usr/local/cascading-1.2.5-hadoop-0.19.2+/lib/jgrapht-jdk1.6-0.8.1.jar"/>
+	<classpathentry kind="lib" path="/usr/local/cascading-1.2.5-hadoop-0.19.2+/lib/riffle-0.1-dev.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

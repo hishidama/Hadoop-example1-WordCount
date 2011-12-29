@@ -1,0 +1,9 @@
+
+word_model = {
+	word : TEXT;
+};
+
+summarized word_count_model = word_model => {
+	any   word -> word;
+	count word -> count;
+} % word;

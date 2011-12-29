@@ -1,0 +1,15 @@
+<factorypath>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/asakusafw/asakusa-runtime/0.2.3/asakusa-runtime-0.2.3.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/asakusafw/asakusa-dsl-vocabulary/0.2.3/asakusa-dsl-vocabulary-0.2.3.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/asakusafw/ashigel-compiler/0.2.3/ashigel-compiler-0.2.3.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/lang/java/java-dom/0.1.0/java-dom-0.1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/lang/java/javadoc-parser/0.1.0/javadoc-parser-0.1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/lang/java/jsr269-bridge/0.1.0/jsr269-bridge-0.1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/util/collection/0.1.0/collection-0.1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/util/simple-graph/0.1.0/simple-graph-0.1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/ch/qos/logback/logback-classic/0.9.28/logback-classic-0.9.28.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/ch/qos/logback/logback-core/0.9.28/logback-core-0.9.28.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>

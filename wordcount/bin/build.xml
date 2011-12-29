@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="hadoop1" default="jar" basedir=".">
+        <target name="jar">
+                <jar jarfile="../sh/hadoop1.jar">
+                        <fileset dir="../classes" includes="**/*.class" />
+                </jar>
+        </target>
+</project>

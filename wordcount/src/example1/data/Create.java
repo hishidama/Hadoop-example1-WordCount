@@ -8,14 +8,8 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
 
-public class Create extends Configured implements Tool {
-
-	public static void main(String[] args) throws Exception {
-		int r = ToolRunner.run(new Create(), args);
-		System.exit(r);
-	}
+public abstract class Create extends Configured implements Tool {
 
 	public int run(String[] args) throws Exception {
 		int size = Integer.parseInt(args[0]);
@@ -48,9 +42,5 @@ public class Create extends Configured implements Tool {
 		return 0;
 	}
 
-	final String[] SS = { "Hello World", "Hello Hadoop", "WordCount" };
-
-	String data(int i) {
-		return SS[i % SS.length];
-	}
+	protected abstract String data(int i);
 }

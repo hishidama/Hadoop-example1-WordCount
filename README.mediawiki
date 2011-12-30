@@ -1,0 +1,171 @@
+
+==概要==
+[http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/index.html Hadoop]の各種方式でWordCountを作ってみた。
+
+==実行環境==
+性能（実行速度）の測定に関しては、[http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/vdist.html VMware Playerを使った仮想環境]で実行しているので、あくまで参考程度。<br>
+CPUのコア数や物理メモリーは足りていると思うが、一番肝心なディスクは1台を共有しているし。
+
+*物理マシン（ホスト）：Core i7 3.4GHz（8スレッド）、メモリー16GB、Windows7（64bit）
+*仮想マシン（ゲスト）：CentOS5.7（64bit）
+**開発機（単独環境）：メモリー2GB
+**NameNode：メモリー2GB
+**DataNode（3台）：メモリー1.5GB
+
+==実行速度==
+{|border="1"
+!rowspan="2"|方式
+!colspan="2"|データパターンA<br>160MB（単語種類数4）
+!colspan="2"|データパターンB<br>160MB（1単語1個）
+|-
+!単独環境
+!仮想分散
+!単独環境
+!仮想分散
+|-
+|Java
+|0:21～0:22
+|0:23～0:26
+|1:00～1:01
+|1:02～1:09
+|-
+|C言語
+|0:26～0:29
+|0:24～0:28
+|1:26～1:33
+|1:09～1:15
+|-
+|C言語（Combinerなし）
+|0:44～0:46
+|0:50～0:54
+|0:55～0:56
+|1:06～1:10
+|-
+|Pig
+|1:44～1:50
+|0:59～1:05
+|5:37～5:38
+|3:19～3:29
+|-
+|Hive
+|0:41～0:42
+|0:56～1:02
+|2:43～2:49
+|2:13～2:16
+|-
+|Asakusa Framework
+|1:24～1:38
+|2:29～2:32
+|3:30～3:36
+|4:39～5:11
+|-
+|Cascading
+|0:22～0:22
+|0:27～0:27
+|4:27～4:29
+|3:12～3:37
+|-
+|Awk
+|0:37～0:42
+|0:33～0:35
+|2:36～2:36
+|1:59～2:01
+|-
+|Awk（R連想配列）
+|0:39～0:44
+|0:30～0:34
+|途中で止めた
+|ジョブ失敗
+|-
+|Awk（MR連想配列）
+|0:13～0:14
+|0:19～0:22
+|測定せず
+|測定せず
+|}
+
+===データパターン===
+パターンAは、単語の種類が少ない（出力結果が少数レコードに集約される）データ。
+
+パターンBは、1つの単語が1回ずつしか出てこない、つまり出力結果が大量になるデータ。（WordCount的には最悪のケース）<br>
+単語数を集計するのに連想配列を使う方式だと問題が出るだろうと思われるパターン。
+
+入力データの160MBというのは、64MB×2＋32MB、つまりHDFSの3ブロック（Mapタスク3個）分というサイズ。
+
+===実行方法===
+分散環境では、各プログラムはNameNode上で起動している。
+
+Pig・Hive・AsakusaFWの環境構築はNameNodeのみに行っている。<br>
+CascadingはNameNodeの$CASCADING_HOMEにインストールし、DataNodeの$HADOOP_HOME/libにjarファイルを入れている。
+
+[https://github.com/hishidama/Hadoop-example1-WordCount/tree/master/wordcount/sh shディレクトリー]をNameNodeや単独環境にコピーすれば、その中の各シェルを実行するだけで各プログラムが起動する（はず）。<br>
+（Hiveはスクリプトファイル内のパスを変更する必要あり）
+
+==所感==
+===単独環境と分散環境===
+単独環境（単体テストを行う環境）と仮想分散環境では、同じ方式（言語）でも当然速度が異なるが、異なり方は方式によって違う。<br>
+さらにデータサイズを変えると異なり方も変わってくると思う。
+
+また、方式間の順位（どれが速いか）については、単独環境と仮想分散環境でもほぼ同じ順位になっているようだ。
+
+===Java（JDK1.6）===
+一番基本的なHadoop（CDH3u2）のJava API（Map/Reduce）を使ったプログラム。
+
+[http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/tutorial.html WordCount]のようなシンプルなプログラムでは、やはりこれが一番速い。
+
+===C言語（gcc 4.1.2）===
+[http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/streaming.html Hadoop Streaming]と[http://www.ne.jp/asahi/hishidama/home/tech/c/c.html C言語]の組み合わせ。
+
+C言語で書いてコンパイルしてネイティブな実行ファイルになっているので、Java版と同じくらいの速度が出ている。
+
+データパターンAではCombinerの有無で2倍くらいの差が出ている。
+
+データパターンBはCombinerで全く集計されないパターンなので、Combinerが余計な処理となっていて、Combiner有りは無しより若干遅い。
+
+StreamingはCombinerの有無をシェルの書き換えだけで切り替えられる（Javaだとリコンパイルが必要）ので、こういうのを試すのは便利。
+
+===Pig（0.8.1）===
+[http://www.ne.jp/asahi/hishidama/home/tech/apache/pig/index.html Pig]は、ソースのステップ数では今回の中で一番少ないし、一番早く作れた。
+
+個人的には[http://www.ne.jp/asahi/hishidama/home/tech/apache/pig/wordcount.html#h_Scala 関数型言語に似ていて]Hiveより良いと思うのだが、残念ながら速度面ではHiveの方が上なようだ。
+
+===Hive（0.7.1）===
+[http://www.ne.jp/asahi/hishidama/home/tech/apache/hive/index.html Hive]は実行環境を作るのが面倒だった。<br>
+というのは、スクリプト内にファイルのパスを直書きすることしか出来ず、しかもCREATE EXTERNAL TABLEが相対パスを認識しないようなので、単独環境で試したスクリプトを分散環境に持っていったら書き換える必要がある為。
+
+ちなみにHiveと似たような位置付けであるPigはスクリプト外部からパラメーターを渡せるようになっているしファイルの相対パスも普通に解釈されるので、こういう問題は無い。
+
+===Asakusa Framework（0.2.3 batchapp）===
+[http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/index.html AsakusaFW]はWordCountのような処理には向いていないので、速度的には残念な結果となった。
+
+向いていない部分というのは、入力1レコードに対し複数レコード出力がある処理。<br>
+AsakusaFW0.2.3時点ではそういう処理はCoGroupまたはGroupSortを使うしかない（と思う）のだが、CoGroupは複数ファイルを（ソートして）マッチングするものだし、GroupSortはソートを行うもの。
+要するに、これらはReducerでの処理となるので、本来Mapperで単語分割したいのに、それが出来ない。
+
+また、この場合は入力の全データが1つのDataNode上でソートされるので、Javaのヒープサイズ不足で落ちる。<br>
+今回は無理矢理FileImporter（InputFormat）で単語分割するようにしたみたので、落ちなくはなったが、速度は出なかった。
+
+===Cascading（1.2）===
+日本ではあまり注目されていない[http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/cascading/index.html Cascading]だが、せっかくなので試してみた。
+
+データパターンAでは、Java版・C言語版に近い速度が出ている。
+
+最初にCascadingを勉強した頃はまだPigを知らなかったので気付かなかったが、CascadingとPigは意外と似ている気がする。
+Pigの考え方・記述方法をJavaのクラスで作ったら、Cascadingのようになるんじゃないかと思う。<br>
+ただ、演算した結果のフィールド名がどうなるのかは、Pigだとdescribeで都度確認できるのに対し、Cascadingは簡単な方法が無い…。
+
+===Awk（gawk 3.1.5）===
+[http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/streaming.html Hadoop Streaming]と[http://www.ne.jp/asahi/hishidama/home/tech/unix/cmd/awk.html Awk]の組み合わせ。
+
+Awkはインタープリター言語（実行時に命令を解釈する）なので、C言語版よりは実行速度が遅くなっている。
+
+Hadoop Streamingをウェブで検索して出てくるサンプルでは、単語の集計部分（Reducer）で連想配列（ディクショナリー・マップ）を使っているものが多いので、同様の構造も試してみた。<br>
+データパターンBではメモリー不足で落ちるかな？と思っていたが、Awkの場合は仮想メモリーを使うようで、Awk自体は落ちなかった。
+しかしマシンの負荷は高まっていたようで、JobTrackerと通信できなくなり、ジョブ失敗で終了した。
+失敗になるまで30分以上かかった。<br>
+単独環境でも30分放っておいても終わらなかったので、強制終了した。
+
+ちなみに、「メモリーに収まる範囲なら連想配列を使う方式でも良い」とすると、ReducerだけでなくMapperでも連想配列を使って自前で集計すればいいじゃん。という事で試してみた。<br>
+すると、Java版よりも速くなった。<br>
+まぁ、この条件なら、Java版でもMapperでHashMapを使って自前集計すればもっと速くなるだろうと思うが、試してはいない。
+

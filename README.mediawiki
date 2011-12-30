@@ -116,11 +116,12 @@ CascadingはNameNodeの$CASCADING_HOMEにインストールし、DataNodeの$HAD
 ===C言語（gcc 4.1.2）===
 [http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/streaming.html Hadoop Streaming]と[http://www.ne.jp/asahi/hishidama/home/tech/c/c.html C言語]の組み合わせ。
 
-C言語で書いてコンパイルしてネイティブな実行ファイルになっているので、Java版と同じくらいの速度が出ている。
+C言語で書いてコンパイルしてネイティブな実行ファイルになっているので、Java版と同じくらいの速度が出ている。<br>
+（ただし、バッファサイズは固定だし、文字コードも特に考慮していないので、Javaの方が安全性・機能性は上）
 
-データパターンAではCombinerの有無で2倍くらいの差が出ている。
+データパターンAではCombinerの有無で速度が2倍くらい違っている。
 
-データパターンBはCombinerで全く集計されないパターンなので、Combinerが余計な処理となっていて、Combiner有りは無しより若干遅い。
+データパターンBはCombinerで全く集計されないパターンなので、Combinerが無駄な処理となっていて、Combiner有りは無しより若干遅い。
 
 StreamingはCombinerの有無をシェルの書き換えだけで切り替えられる（Javaだとリコンパイルが必要）ので、こういうのを試すのは便利。
 
@@ -145,6 +146,11 @@ AsakusaFW0.2.3時点ではそういう処理はCoGroupまたはGroupSortを使�
 また、この場合は入力の全データが1つのDataNode上でソートされるので、Javaのヒープサイズ不足で落ちる。<br>
 今回は無理矢理FileImporter（InputFormat）で単語分割するようにしたみたので、落ちなくはなったが、速度は出なかった。
 
+そもそもAsakusaFWは基幹バッチ向けということで、データモデル（Writableクラス）をきっちり定義することでも分かるように、
+WordCountのような1レコード内に不定数のデータが入っているものは対象外なのだろう。<br>
+CSVファイルでいわゆる横持ちになっているデータを縦持ちに直すという要求はもしかするとあるかもしれないが＾＾；
+（「商品コード1,個数1,商品コード2,個数2,…,商品コード10,個数10」のような1レコードを「商品コード,個数」の10レコードに変換する）
+
 ===Cascading（1.2）===
 日本ではあまり注目されていない[http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/cascading/index.html Cascading]だが、せっかくなので試してみた。
 
@@ -152,7 +158,7 @@ AsakusaFW0.2.3時点ではそういう処理はCoGroupまたはGroupSortを使�
 
 最初にCascadingを勉強した頃はまだPigを知らなかったので気付かなかったが、CascadingとPigは意外と似ている気がする。
 Pigの考え方・記述方法をJavaのクラスで作ったら、Cascadingのようになるんじゃないかと思う。<br>
-ただ、演算した結果のフィールド名がどうなるのかは、Pigだとdescribeで都度確認できるのに対し、Cascadingは簡単な方法が無い…。
+ただ、演算した結果のフィールド名がどうなるのかは、Pigだとdescribeで都度確認できるのに対し、Cascadingは簡単に確認する方法が無い…。
 
 ===Awk（gawk 3.1.5）===
 [http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/streaming.html Hadoop Streaming]と[http://www.ne.jp/asahi/hishidama/home/tech/unix/cmd/awk.html Awk]の組み合わせ。
@@ -161,11 +167,10 @@ Awkはインタープリター言語（実行時に命令を解釈する）な�
 
 Hadoop Streamingをウェブで検索して出てくるサンプルでは、単語の集計部分（Reducer）で連想配列（ディクショナリー・マップ）を使っているものが多いので、同様の構造も試してみた。<br>
 データパターンBではメモリー不足で落ちるかな？と思っていたが、Awkの場合は仮想メモリーを使うようで、Awk自体は落ちなかった。
-しかしマシンの負荷は高まっていたようで、JobTrackerと通信できなくなり、ジョブ失敗で終了した。
+しかしマシンの負荷は高まっていたようで、JobTrackerと通信できなくなり（各タスクがタイムアウトになった）、ジョブ失敗で終了した。
 失敗になるまで30分以上かかった。<br>
 単独環境でも30分放っておいても終わらなかったので、強制終了した。
 
-ちなみに、「メモリーに収まる範囲なら連想配列を使う方式でも良い」とすると、ReducerだけでなくMapperでも連想配列を使って自前で集計すればいいじゃん。という事で試してみた。<br>
-すると、Java版よりも速くなった。<br>
+ちなみに、「メモリーに収まる範囲なら連想配列を使う方式でも良い」とすると、ReducerだけでなくMapperでも連想配列を使って自前で集計すればいいじゃん。<br>
+という事で試してみたら、Java版よりも速くなった！<br>
 まぁ、この条件なら、Java版でもMapperでHashMapを使って自前集計すればもっと速くなるだろうと思うが、試してはいない。
-

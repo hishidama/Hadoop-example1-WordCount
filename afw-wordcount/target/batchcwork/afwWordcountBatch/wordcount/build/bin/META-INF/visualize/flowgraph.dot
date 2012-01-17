@@ -1,7 +1,7 @@
 digraph {
-    "0bf875ad-d813-4858-aea7-c4ba724b60a2" [shape=box, label="@Summarize\nWordCountOperator.count"];
-    "237b8125-ccce-43c1-980f-24bf96cdac9f" [shape=invhouse, label="out"];
-    "e7cdb56a-a77d-449d-86c1-1942711731f9" [shape=invhouse, label="in"];
-    "0bf875ad-d813-4858-aea7-c4ba724b60a2" -> "237b8125-ccce-43c1-980f-24bf96cdac9f" [label="out>port"];
-    "e7cdb56a-a77d-449d-86c1-1942711731f9" -> "0bf875ad-d813-4858-aea7-c4ba724b60a2" [label="port>wm"];
+    "9766e1b1-9f38-4b4b-8933-9413c71ec2bd" [shape=invhouse, label="in"];
+    "ce97c4a1-4c18-483e-8d7d-9f0ce5fdf90c" [shape=box, label="@Summarize\nWordCountOperator.count"];
+    "bb3800b9-9544-4f6b-846f-d30ee154e025" [shape=invhouse, label="out"];
+    "9766e1b1-9f38-4b4b-8933-9413c71ec2bd" -> "ce97c4a1-4c18-483e-8d7d-9f0ce5fdf90c" [label="port>wm"];
+    "ce97c4a1-4c18-483e-8d7d-9f0ce5fdf90c" -> "bb3800b9-9544-4f6b-846f-d30ee154e025" [label="out>port"];
 }

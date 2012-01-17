@@ -49,6 +49,9 @@ public final class StageClient extends AbstractStageClient {
     @Override protected Class<ShufflePartitioner> getPartitionerClassOrNull() {
         return ShufflePartitioner.class;
     }
+    @Override protected Class<StageCombiner> getCombinerClassOrNull() {
+        return StageCombiner.class;
+    }
     @Override protected Class<ShuffleSortComparator> getSortComparatorClassOrNull() {
         return ShuffleSortComparator.class;
     }

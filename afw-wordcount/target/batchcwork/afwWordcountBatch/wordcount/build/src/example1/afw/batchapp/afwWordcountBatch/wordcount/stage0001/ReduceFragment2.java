@@ -2,7 +2,7 @@ package example1.afw.batchapp.afwWordcountBatch.wordcount.stage0001;
 import com.asakusafw.runtime.core.Result;
 import example1.afw.modelgen.dmdl.model.WordCountModel;
 /**
- * {@code [wm->WordCountOperator.count(operator#1516725303)]}の処理を担当するマッププログラムの断片。
+ * {@code [wm->WordCountOperator.count(operator#1239943370)]}の処理を担当するマッププログラムの断片。
  */
 @SuppressWarnings("deprecation") public final class ReduceFragment2 extends com.asakusafw.runtime.flow.Rendezvous<
         ShuffleValue> {

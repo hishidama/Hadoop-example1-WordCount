@@ -1,4 +1,8 @@
 
+text_model = {
+	text : TEXT;
+};
+
 word_model = {
 	word : TEXT;
 };

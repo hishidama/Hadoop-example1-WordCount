@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 /**
- * {@code [in->padding(pseud#971277631){owner=FlowBlock&#64;671268154}]}の処理を担当するマッププログラム。
+ * {@code [in->padding(pseud#546909102){owner=FlowBlock&#64;489854530}]}の処理を担当するマッププログラム。
  */
 @SuppressWarnings("deprecation") public final class StageMapper1 extends Mapper<NullWritable, WordModel, ShuffleKey, 
         ShuffleValue> {

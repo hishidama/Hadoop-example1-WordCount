@@ -1,19 +1,19 @@
 digraph {
-    subgraph "cluster_d85a3884-eb27-46fb-85cc-45788146d515" {
+    subgraph "cluster_3f82f873-352b-4f3c-a5d4-16898227c8a9" {
         label = "(source)";
-        "a4da73d7-86d8-46e5-96fa-fc5a2efc96d4" [shape=invhouse, label="in"];
+        "923b9155-c088-4782-9b92-89b15f68466e" [shape=invhouse, label="in"];
     }
-    subgraph "cluster_89f1438c-70bc-40c9-b894-bfcf9eec3f11" {
+    subgraph "cluster_4296a396-b2e7-4119-916d-664194cf68c5" {
         label = "(sink)";
-        "c5afd1c6-a2c7-45ac-aca0-31b2d0edb631" [shape=invhouse, label="out"];
+        "52ed440d-237f-4e30-b321-0eb0074029c5" [shape=invhouse, label="out"];
     }
-    subgraph "cluster_1952a261-8d65-4ce7-950b-9471ece3b519" {
+    subgraph "cluster_37595fad-5567-4fc2-b9e2-096154ce960a" {
         label = "stage0001";
         style = bold;
-        "141d54be-c99e-4f0f-9d71-d5d48a8593e6" [shape=box, label="@Summarize\nWordCountOperator.count"];
-        "87f44b24-1f69-4b9f-8fd4-43718c53de30" [shape=point];
+        "3d106caa-02c5-444c-ab64-954c52c85d22" [shape=point];
+        "c4139be3-a557-4e2a-a7bd-673d872fca1c" [shape=box, label="@Summarize\nWordCountOperator.count"];
     }
-    "a4da73d7-86d8-46e5-96fa-fc5a2efc96d4" -> "87f44b24-1f69-4b9f-8fd4-43718c53de30" [label="port>in"];
-    "141d54be-c99e-4f0f-9d71-d5d48a8593e6" -> "c5afd1c6-a2c7-45ac-aca0-31b2d0edb631" [label="out>port"];
-    "87f44b24-1f69-4b9f-8fd4-43718c53de30" -> "141d54be-c99e-4f0f-9d71-d5d48a8593e6" [label="out>wm"];
+    "923b9155-c088-4782-9b92-89b15f68466e" -> "3d106caa-02c5-444c-ab64-954c52c85d22" [label="port>in"];
+    "3d106caa-02c5-444c-ab64-954c52c85d22" -> "c4139be3-a557-4e2a-a7bd-673d872fca1c" [label="out>wm"];
+    "c4139be3-a557-4e2a-a7bd-673d872fca1c" -> "52ed440d-237f-4e30-b321-0eb0074029c5" [label="out>port"];
 }

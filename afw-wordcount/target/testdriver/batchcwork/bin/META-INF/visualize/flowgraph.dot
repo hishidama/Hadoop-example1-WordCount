@@ -1,7 +1,9 @@
 digraph {
-    "e671e771-b9a8-47e7-b07f-ac097412b055" [shape=invhouse, label="in"];
-    "6ffc7769-9c4f-40ea-b982-c554248f4e78" [shape=box, label="@Summarize\nWordCountOperator.count"];
-    "adbca5b7-2d1a-4b0b-b1f5-c4dcf77f8c33" [shape=invhouse, label="out"];
-    "e671e771-b9a8-47e7-b07f-ac097412b055" -> "6ffc7769-9c4f-40ea-b982-c554248f4e78" [label="port>wm"];
-    "6ffc7769-9c4f-40ea-b982-c554248f4e78" -> "adbca5b7-2d1a-4b0b-b1f5-c4dcf77f8c33" [label="out>port"];
+    "4556c843-729f-4f58-b5df-5434a4a1f9f8" [shape=invhouse, label="out"];
+    "9202b981-e52a-4371-9bfe-1800a3087847" [shape=box, label="@Extract\nWordCountOperator.split"];
+    "9aec39d1-77b6-46ab-aed2-a50742fdeb8d" [shape=box, label="@Summarize\nWordCountOperator.count"];
+    "f43239ca-2657-46ae-9080-4270bca51cd8" [shape=invhouse, label="in"];
+    "9202b981-e52a-4371-9bfe-1800a3087847" -> "9aec39d1-77b6-46ab-aed2-a50742fdeb8d" [label="out>wm"];
+    "9aec39d1-77b6-46ab-aed2-a50742fdeb8d" -> "4556c843-729f-4f58-b5df-5434a4a1f9f8" [label="out>port"];
+    "f43239ca-2657-46ae-9080-4270bca51cd8" -> "9202b981-e52a-4371-9bfe-1800a3087847" [label="port>tm"];
 }

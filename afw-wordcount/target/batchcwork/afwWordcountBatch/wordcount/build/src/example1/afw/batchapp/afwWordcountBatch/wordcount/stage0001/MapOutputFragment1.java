@@ -4,7 +4,7 @@ import example1.afw.modelgen.dmdl.model.WordCountModel;
 import example1.afw.modelgen.dmdl.model.WordModel;
 import org.apache.hadoop.mapreduce.TaskInputOutputContext;
 /**
- * {@code wm->WordCountOperator.count(operator#1516725303)}へのシャッフル処理を担当するプログラムの断片。
+ * {@code wm->WordCountOperator.count(operator#1239943370)}へのシャッフル処理を担当するプログラムの断片。
  */
 @SuppressWarnings("deprecation") public final class MapOutputFragment1 implements Result<WordModel> {
     private final TaskInputOutputContext<?, ?, ? super ShuffleKey, ? super ShuffleValue> collector;

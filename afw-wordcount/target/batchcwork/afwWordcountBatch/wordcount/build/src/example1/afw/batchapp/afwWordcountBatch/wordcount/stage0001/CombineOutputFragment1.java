@@ -3,7 +3,7 @@ import com.asakusafw.runtime.core.Result;
 import example1.afw.modelgen.dmdl.model.WordCountModel;
 import org.apache.hadoop.mapreduce.TaskInputOutputContext;
 /**
- * {@code wm->WordCountOperator.count(operator#1516725303)}へのシャッフル処理を担当するプログラムの断片。
+ * {@code wm->WordCountOperator.count(operator#1239943370)}へのシャッフル処理を担当するプログラムの断片。
  */
 @SuppressWarnings("deprecation") public final class CombineOutputFragment1 implements Result<WordCountModel> {
     private final TaskInputOutputContext<?, ?, ? super ShuffleKey, ? super ShuffleValue> collector;

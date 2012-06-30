@@ -236,4 +236,7 @@ Awkでの連想配列使用版と同様に、JavaのMapperでjava.util.HashMap�
 ===Huahin Framework（0.1.0）===
 [http://www.ne.jp/asahi/hishidama/home/tech/huahinfw/index.html Huahin Framework]が出たので、これも試してみた。
 
-アプリケーションのコーディングはしやすいのだが、速度が全然出ない…。アプリケーションの作り方が悪いのだろうか。
+アプリケーションのコーディングはしやすいのだが、速度が全然出ない…。
+Combinerが使われていないのは想定内だが、C言語のCombiner無し版と比べても遅すぎる。<br>
+Mapperの出力バイト数やShuffleのバイト数（約3GB）がC言語のCombiner無し版（約250MB）の10倍以上あるので、そのせいか？<br>
+アプリケーションの作り方が悪くてこうなってしまったのだろうか。

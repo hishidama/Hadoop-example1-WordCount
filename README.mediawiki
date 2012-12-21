@@ -222,5 +222,5 @@ Mapperの出力バイト数やShuffleのバイト数（約3GB）がC言語のCom
 ===AZAREA-Cluster Framework（0.9.0 評価版）===
 [http://www.ne.jp/asahi/hishidama/home/tech/azarea/index.html AZAREA-Cluster Framework]が公表されたので、評価版を試してみた。
 
-AZAREAはフローを描くとJavaソースを生成してくれるので、WordCountくらいシンプルだと確かに便利。ほとんどコーディングする場所は無かった。
-実効速度もかなり速い部類に入る。
+AZAREAはフローを描くとJavaソースを生成してくれるので、WordCountくらいシンプルだと確かに便利。ほとんどコーディングする場所は無かった。<br>
+実行速度もかなり速い部類に入る。

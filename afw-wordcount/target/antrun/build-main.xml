@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<project name="maven-antrun-" default="main"  >
-<target name="main">
-  <property name="compile_classpath" refid="maven.test.classpath"/>
-  <ant antfile="/home/asakusa/ws_hadoop1/afw-wordcount/src/main/scripts/asakusa-build.xml">
-    <target name="batch:compile:all"/>
-  </ant>
-</target>
-</project>

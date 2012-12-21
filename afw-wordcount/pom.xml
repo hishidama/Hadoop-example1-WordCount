@@ -7,26 +7,35 @@
 	<version>1.0</version>
 
 	<properties>
-		<asakusafw.version>0.2.3</asakusafw.version>
+		<asakusafw.version>0.4.0</asakusafw.version>
 
-		<cloudera.cdh.version>0.20.2-cdh3u2</cloudera.cdh.version>
-		<mysql.jdbc.version>5.1.16</mysql.jdbc.version>
-		<ashigeru.lang.version>0.1.0</ashigeru.lang.version>
-		<ashigeru.util.version>0.1.0</ashigeru.util.version>
-		<commons.io.version>2.0.1</commons.io.version>
+		<hadoop.version>0.20.2-cdh3u5</hadoop.version>
+		<commons.io.version>2.3</commons.io.version>
 		<commons.lang.version>2.6</commons.lang.version>
 		<commons.logging.version>1.0.4</commons.logging.version>
-		<logback.version>0.9.28</logback.version>
-		<slf4j.version>1.6.1</slf4j.version>
-		<junit.version>4.8.2</junit.version>
+		<logback.version>1.0.3</logback.version>
+		<slf4j.version>1.6.6</slf4j.version>
+		<junit.version>4.10</junit.version>
 		<hamcrest.version>1.1</hamcrest.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<asakusa.build.antfile>${env.ASAKUSA_HOME}/scripts/asakusa-build.xml</asakusa.build.antfile>
+
+		<plugin.resources.version>2.5</plugin.resources.version>
+		<plugin.compiler.version>2.5.1</plugin.compiler.version>
+		<plugin.surefire.version>2.12</plugin.surefire.version>
+		<plugin.source.version>2.1.2</plugin.source.version>
+		<plugin.eclipse.version>2.9</plugin.eclipse.version>
+		<plugin.m2e.version>1.0.0</plugin.m2e.version>
+		<plugin.build-helper.version>1.7</plugin.build-helper.version>
+		<plugin.antrun.version>1.7</plugin.antrun.version>
+		<plugin.properties.version>1.0-alpha-2</plugin.properties.version>
+		<plugin.assembly.version>2.3</plugin.assembly.version>
 	</properties>
 
 	<profiles>
 		<profile>
-			<id>asakusa-batchapp-defalut-profile</id>
+			<id>asakusa-batchapp-default-profile</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -41,8 +50,9 @@
 	<repositories>
 		<repository>
 			<id>central</id>
-			<name>Maven Central repository</name>
-			<url>http://repo1.maven.org/maven2/</url>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -50,7 +60,7 @@
 		<repository>
 			<id>repository.cloudera.com</id>
 			<name>Cloudera Maven Repository</name>
-			<url>https://repository.cloudera.com/content/repositories/releases</url>
+			<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -76,12 +86,54 @@
 		</repository>
 	</repositories>
 
+	<pluginRepositories>
+		<pluginRepository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</pluginRepository>
+		<pluginRepository>
+			<id>codehaus.org</id>
+			<name>Codehaus Maven Repository</name>
+			<url>http://repository.codehaus.org/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>com.asakusafw.releases</id>
+			<name>Asakusa Framework Repository</name>
+			<url>http://asakusafw.s3.amazonaws.com/maven/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>com.asakusafw.snapshots</id>
+			<name>Asakusa Framework Snapshot Repository</name>
+			<url>http://asakusafw.s3.amazonaws.com/maven/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
+				<version>${plugin.resources.version}</version>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
@@ -89,7 +141,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>${plugin.compiler.version}</version>
 				<configuration>
 					<fork>true</fork>
 					<encoding>${project.build.sourceEncoding}</encoding>
@@ -101,7 +153,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.8</version>
+				<version>${plugin.surefire.version}</version>
 				<configuration>
 					<argLine>-ea</argLine>
 					<includes>
@@ -113,7 +165,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
+				<version>${plugin.source.version}</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -126,18 +178,43 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.8</version>
+				<version>${plugin.eclipse.version}</version>
 				<configuration>
-					<useProjectReferences>false</useProjectReferences>
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>false</downloadJavadocs>
 					<classpathContainers>
 						<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</classpathContainer>
 					</classpathContainers>
 					<excludes>
-						<exclude>com.asakusafw:asakusa-distribution</exclude>
 						<exclude>com.asakusafw:asakusa-cleaner</exclude>
+						<exclude>com.asakusafw:asakusa-directio-tools</exclude>
+						<exclude>com.asakusafw:asakusa-distribution</exclude>
+						<exclude>com.asakusafw:asakusa-operation-tools</exclude>
+						<exclude>com.asakusafw:asakusa-runtime-all</exclude>
 						<exclude>com.asakusafw:asakusa-thundergate</exclude>
+						<exclude>com.asakusafw:asakusa-thundergate-dmdl</exclude>
+						<exclude>com.asakusafw:asakusa-thundergate-plugin</exclude>
+						<exclude>com.asakusafw:asakusa-thundergate-runtime</exclude>
+						<exclude>com.asakusafw:asakusa-thundergate-test-moderator</exclude>
+						<exclude>com.asakusafw:asakusa-thundergate-vocabulary</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-bootstrap</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-core</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-dmdl</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-hadoopfs</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-jdbc</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-plugin</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-stream</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-test-moderator</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-vocabulary</exclude>
+						<exclude>com.asakusafw:asakusa-windgate-retryable</exclude>
+						<exclude>com.asakusafw:asakusa-yaess-bootstrap</exclude>
+						<exclude>com.asakusafw:asakusa-yaess-flowlog</exclude>
+						<exclude>com.asakusafw:asakusa-yaess-jobqueue</exclude>
+						<exclude>com.asakusafw:asakusa-yaess-jsch</exclude>
+						<exclude>com.asakusafw:asakusa-yaess-multidispatch</exclude>
+						<exclude>com.asakusafw:asakusa-yaess-paralleljob</exclude>
+						<exclude>com.asakusafw:asakusa-yaess-tools</exclude>
+						<exclude>mysql:mysql-connector-java</exclude>
 						<exclude>com.asakusafw:ashigel-compiler-bootstrap</exclude>
 						<exclude>org.eclipse.jdt:core</exclude>
 					</excludes>
@@ -170,38 +247,23 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 						</file>
 						<file>
 							<name>.factorypath</name>
-							<content>
-<![CDATA[
-<factorypath>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/asakusafw/asakusa-runtime/${asakusafw.version}/asakusa-runtime-${asakusafw.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/asakusafw/asakusa-dsl-vocabulary/${asakusafw.version}/asakusa-dsl-vocabulary-${asakusafw.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/asakusafw/ashigel-compiler/${asakusafw.version}/ashigel-compiler-${asakusafw.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/lang/java/java-dom/${ashigeru.lang.version}/java-dom-${ashigeru.lang.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/lang/java/javadoc-parser/${ashigeru.lang.version}/javadoc-parser-${ashigeru.lang.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/lang/java/jsr269-bridge/${ashigeru.lang.version}/jsr269-bridge-${ashigeru.lang.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/util/collection/${ashigeru.util.version}/collection-${ashigeru.util.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/ashigeru/util/simple-graph/${ashigeru.util.version}/simple-graph-${ashigeru.util.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/commons-io/commons-io/${commons.io.version}/commons-io-${commons.io.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/commons-lang/commons-lang/${commons.lang.version}/commons-lang-${commons.lang.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/ch/qos/logback/logback-classic/${logback.version}/logback-classic-${logback.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/ch/qos/logback/logback-core/${logback.version}/logback-core-${logback.version}.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/slf4j-api/${slf4j.version}/slf4j-api-${slf4j.version}.jar" enabled="true" runInBatchMode="false"/>
-</factorypath>
-]]>
-							</content>
+							<location>eclipse/factorypath.xml</location>
 						</file>
 					</additionalConfig>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-archetype-plugin</artifactId>
-				<version>2.0</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.asakusafw</groupId>
+						<artifactId>asakusa-archetype-directio</artifactId>
+						<version>${asakusafw.version}</version>
+						<classifier>eclipse</classifier>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.5</version>
+				<version>${plugin.build-helper.version}</version>
 				<executions>
 					<execution>
 						<id>add-source</id>
@@ -221,16 +283,17 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.6</version>
+				<version>${plugin.antrun.version}</version>
 				<executions>
 					<execution>
-						<id>modelgen</id>
+						<id>asakusa-generate-sources</id>
 						<phase>generate-sources</phase>
 						<configuration>
 							<target>
+								<mkdir dir="target/generated-sources/annotations" />
 								<property name="compile_classpath" refid="maven.test.classpath" />
-								<ant antfile="${basedir}/src/main/scripts/asakusa-build.xml">
-									<target name="modelgen" />
+								<ant antfile="${asakusa.build.antfile}">
+									<target name="generate-model" />
 								</ant>
 							</target>
 						</configuration>
@@ -239,13 +302,13 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 						</goals>
 					</execution>
 					<execution>
-						<id>batch:compile:all</id>
+						<id>asakusa-package</id>
 						<phase>package</phase>
 						<configuration>
 							<target>
 								<property name="compile_classpath" refid="maven.test.classpath" />
-								<ant antfile="${basedir}/src/main/scripts/asakusa-build.xml">
-									<target name="batch:compile:all" />
+								<ant antfile="${asakusa.build.antfile}">
+									<target name="compile-batchapp" />
 								</ant>
 							</target>
 						</configuration>
@@ -258,8 +321,22 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 						<configuration>
 							<target>
 								<property name="compile_classpath" refid="maven.test.classpath" />
-								<ant antfile="${basedir}/src/main/scripts/asakusa-build.xml"
-									target="install:dev" />
+								<tstamp>
+									<format property="now.time" pattern="yyyyMMddHHmmss" />
+								</tstamp>
+								<move file="${env.ASAKUSA_HOME}" todir="${env.ASAKUSA_HOME}_${now.time}"
+									failonerror="false" />
+								<mkdir dir="${env.ASAKUSA_HOME}" />
+								<untar dest="${env.ASAKUSA_HOME}" compression="gzip">
+									<fileset dir="${project.build.directory}">
+										<include name="asakusafw-${asakusafw.version}-dev.tar.gz" />
+									</fileset>
+								</untar>
+								<chmod perm="755">
+									<fileset dir="${env.ASAKUSA_HOME}">
+										<include name="**/*.sh" />
+									</fileset>
+								</chmod>
 							</target>
 						</configuration>
 					</execution>
@@ -268,7 +345,7 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
-				<version>1.0-alpha-2</version>
+				<version>${plugin.properties.version}</version>
 				<executions>
 					<execution>
 						<phase>initialize</phase>
@@ -286,7 +363,14 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
+				<version>${plugin.assembly.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.asakusafw</groupId>
+						<artifactId>asakusa-distribution</artifactId>
+						<version>${asakusafw.version}</version>
+					</dependency>
+				</dependencies>
 				<executions>
 					<execution>
 						<id>default-cli</id>
@@ -294,21 +378,66 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<descriptors>
-								<descriptor>src/main/assembly/asakusa-install-dev.xml</descriptor>
-							</descriptors>
+							<descriptorRefs>
+								<descriptorRef>dev</descriptorRef>
+								<descriptorRef>prod-directio</descriptorRef>
+							</descriptorRefs>
+							<finalName>asakusafw-${asakusafw.version}</finalName>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>${plugin.m2e.version}</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>properties-maven-plugin</artifactId>
+										<versionRange>${plugin.properties.version}</versionRange>
+										<goals>
+											<goal>read-project-properties</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-antrun-plugin</artifactId>
+										<versionRange>${plugin.antrun.version}</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-core</artifactId>
-			<version>${cloudera.cdh.version}</version>
+			<version>${hadoop.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -328,6 +457,11 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 		</dependency>
 		<dependency>
 			<groupId>com.asakusafw</groupId>
+			<artifactId>asakusa-dsl-analysis-plugin</artifactId>
+			<version>${asakusafw.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.asakusafw</groupId>
 			<artifactId>asakusa-test-driver</artifactId>
 			<version>${asakusafw.version}</version>
 			<scope>test</scope>
@@ -340,50 +474,27 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 		</dependency>
 		<dependency>
 			<groupId>com.asakusafw</groupId>
-			<artifactId>asakusa-model-generator</artifactId>
-			<version>${asakusafw.version}</version>
-			<scope>test</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.asakusafw</groupId>
-			<artifactId>asakusa-thundergate-vocabulary</artifactId>
+			<artifactId>asakusa-directio-vocabulary</artifactId>
 			<version>${asakusafw.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.asakusafw</groupId>
-			<artifactId>asakusa-thundergate-plugin</artifactId>
+			<artifactId>asakusa-directio-dmdl</artifactId>
 			<version>${asakusafw.version}</version>
-			<scope>test</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.asakusafw</groupId>
-			<artifactId>asakusa-distribution</artifactId>
+			<artifactId>asakusa-directio-plugin</artifactId>
 			<version>${asakusafw.version}</version>
-			<classifier>dev-exclude-lib</classifier>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.asakusafw</groupId>
-			<artifactId>asakusa-cleaner</artifactId>
-			<version>${asakusafw.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.asakusafw</groupId>
-			<artifactId>asakusa-thundergate</artifactId>
-			<version>${asakusafw.version}</version>
-			<scope>test</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.asakusafw</groupId>
-			<artifactId>asakusa-thundergate-test-moderator</artifactId>
+			<artifactId>asakusa-directio-test-moderator</artifactId>
 			<version>${asakusafw.version}</version>
 			<scope>test</scope>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.asakusafw</groupId>
@@ -398,16 +509,21 @@ org.eclipse.jdt.apt.reconcileEnabled=true
 			<version>${asakusafw.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.jdbc.version}</version>
+			<groupId>com.asakusafw</groupId>
+			<artifactId>asakusa-distribution</artifactId>
+			<version>${asakusafw.version}</version>
 			<scope>test</scope>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

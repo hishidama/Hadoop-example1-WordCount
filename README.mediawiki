@@ -53,29 +53,11 @@ CPUのコア数や物理メモリーは足りていると思うが、一番肝�
 |2:43～2:49
 |2:13～2:16
 |-
-|Asakusa Framework（当初版）
-|1:24～1:38
-|2:29～2:32
-|3:30～3:36
-|4:39～5:11
-|-
-|Asakusa Framework（Extract版）
-|1:20～1:33
-|2:24～2:27
-|3:21～3:40
-|4:16～4:23
-|-
-|Asakusa Framework（当初版Combinerあり）
-|0:38～0:39
+|Asakusa Framework
+|0:43～0:45
 |0:47～0:48
-|3:48～4:03
-|4:31～4:40
-|-
-|Asakusa Framework（Extract版Combinerあり）
-|0:37～0:37
-|0:45～0:46
-|4:07～4:25
-|4:10～4:21
+|2:03～2:27
+|3:32～4:10
 |-
 |Cascading
 |0:22～0:22
@@ -118,6 +100,12 @@ CPUのコア数や物理メモリーは足りていると思うが、一番肝�
 |22:06～24:32
 |測定せず
 |測定せず
+|-
+|AZAREA-Cluster Framework
+|0:25～0:33
+|0:33～0:35
+|1:56〜2:23
+|1:52〜2:12
 |}
 
 ===データパターン===
@@ -177,24 +165,14 @@ StreamingはCombinerの有無をシェルの書き換えだけで切り替えら
 
 ちなみにHiveと似たような位置付けであるPigはスクリプト外部からパラメーターを渡せるようになっているしファイルの相対パスも普通に解釈されるので、こういう問題は無い。
 
-===Asakusa Framework（0.2.3 batchapp）===
-[http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/index.html AsakusaFW]の当初版は遅かったが、設定ミスだった。
+===Asakusa Framework（0.4.0 Direct I/O）===
+[http://www.ne.jp/asahi/hishidama/home/tech/asakusafw/index.html AsakusaFW]のDirect I/O版で作り直した。
+（最初は0.2.3 batchappで作っていた。テキストファイルに対応していなくてInputFormatを自作したりしたが、
+Direct I/Oでは自動生成してくれるので、ファイル名とパスくらいのコーディングで済む）
 
-以前AsakusaFWでWordCountを作ったときは、単語分割は入力1レコードに対し複数レコード出力となるので、CoGroup演算子を使った。
-しかしCoGroupは複数ファイルを（ソートして）マッチングするものであり、Reducerでの処理となるので、
-入力の全データが1つのDataNode上でソートされてJavaのヒープサイズ不足で落ちる。<br>
-今回（当初版）はCoGroupを使わず無理矢理FileImporter（InputFormat）で単語分割するようにしたみたので、落ちなくはなったが、速度は出なかった。
-
-そして、Mapタイプで複数レコード出力できるExtract演算子が在る事に気付いたので、演算子はそれを使い、InputFormatは通常のText用にしてみた。<br>
-が、当初版より若干速くなっただけで、大差は無かった…。
-
-しかしログを見るとCombinerが一切出力されていなかった為、Summrized演算子にPartialAggregation.PARTIALを指定して部分集約（中間集計）を行うようにしたところ、
-当初版もExtract版もデータパターンAでは速度が劇的に改善され、PigやHiveより速くなった。Java版より約20秒遅い程度。<br>
+データパターンAの実行速度はPigやHiveより速く、Java版より約20秒遅い程度。<br>
 AsakusaFWではepilogue.fileioという後処理を行っており、これが10秒くらいなので、処理本体の実行時間はJava版に近付いている。<br>
 一方、データパターンBではepilogue.fileioが1分30秒以上かかっているので、出力件数次第で余計な時間がかかってしまうという事のようだ。
-
-まぁしかし、これで、CSVファイルで「いわゆる横持ちになっているデータを縦持ちに直す」という要求も現実的な時間で処理できそうだ。
-（「商品コード1,個数1,商品コード2,個数2,…,商品コード10,個数10」のような1レコードを「商品コード,個数」の10レコードに変換する）
 
 ===Cascading（1.2）===
 日本ではあまり注目されていない[http://www.ne.jp/asahi/hishidama/home/tech/apache/hadoop/cascading/index.html Cascading]だが、せっかくなので試してみた。
@@ -234,9 +212,15 @@ Awkでの連想配列使用版と同様に、JavaのMapperでjava.util.HashMap�
 むしろ単独環境のデータパターンBでは速くなった。無制限だと1つのHashMapをずっと拡張していくことになるので、サイズ拡張時にコピーが発生するしGCも起こりやすくなるだろうから、やはり効率は良くないようだ。
 
 ===Huahin Framework（0.1.0）===
-[http://www.ne.jp/asahi/hishidama/home/tech/huahinfw/index.html Huahin Framework]が出たので、これも試してみた。
+[http://www.ne.jp/asahi/hishidama/home/tech/huahinfw/index.html Huahin Framework]が出たので、試してみた。
 
 アプリケーションのコーディングはしやすいのだが、速度が全然出ない…。
 Combinerが使われていないのは想定内だが、C言語のCombiner無し版と比べても遅すぎる。<br>
 Mapperの出力バイト数やShuffleのバイト数（約3GB）がC言語のCombiner無し版（約250MB）の10倍以上あるので、そのせいか？<br>
-アプリケーションの作り方が悪くてこうなってしまったのだろうか。
+自分のアプリケーションの作り方が悪くてこうなってしまったのだろうか。
+
+===AZAREA-Cluster Framework（0.9.0 評価版）===
+[http://www.ne.jp/asahi/hishidama/home/tech/azarea/index.html AZAREA-Cluster Framework]が公表されたので、評価版を試してみた。
+
+AZAREAはフローを描くとJavaソースを生成してくれるので、WordCountくらいシンプルだと確かに便利。ほとんどコーディングする場所は無かった。
+実効速度もかなり速い部類に入る。

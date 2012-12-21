@@ -1,9 +1,0 @@
-digraph {
-    "5d574284-2f6a-4ec8-b5c4-9d083f6bc2cb" [shape=box, label="@Summarize\nWordCountOperator.count"];
-    "8fbe19d2-9b2e-430a-9eb3-a085ccf8ea75" [shape=invhouse, label="out"];
-    "b234c699-6f31-4763-b445-dd0d5da0e7dd" [shape=box, label="@Extract\nWordCountOperator.split"];
-    "deee7445-2b23-40db-919c-745d568e4b29" [shape=invhouse, label="in"];
-    "5d574284-2f6a-4ec8-b5c4-9d083f6bc2cb" -> "8fbe19d2-9b2e-430a-9eb3-a085ccf8ea75" [label="out>port"];
-    "b234c699-6f31-4763-b445-dd0d5da0e7dd" -> "5d574284-2f6a-4ec8-b5c4-9d083f6bc2cb" [label="out>wm"];
-    "deee7445-2b23-40db-919c-745d568e4b29" -> "b234c699-6f31-4763-b445-dd0d5da0e7dd" [label="port>tm"];
-}

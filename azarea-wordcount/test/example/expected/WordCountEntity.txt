@@ -1,0 +1,4 @@
+Hello	3
+World	1
+Hadoop	1
+AZAREA	1

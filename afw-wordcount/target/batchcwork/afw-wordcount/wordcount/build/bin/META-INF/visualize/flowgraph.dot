@@ -1,7 +1,0 @@
-digraph {
-    "bc39aff4-e003-4b64-8bc1-6ae0d820b936" [shape=box, label="@Summarize\nWordCountOperator.count"];
-    "c7a6be10-7e81-47c7-9e1d-71bebcd5cbe7" [shape=invhouse, label="out"];
-    "86deb3ba-ac92-49c5-8b7b-c4d8e8654056" [shape=invhouse, label="in"];
-    "bc39aff4-e003-4b64-8bc1-6ae0d820b936" -> "c7a6be10-7e81-47c7-9e1d-71bebcd5cbe7" [label="out>port"];
-    "86deb3ba-ac92-49c5-8b7b-c4d8e8654056" -> "bc39aff4-e003-4b64-8bc1-6ae0d820b936" [label="port>wm"];
-}

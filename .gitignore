@@ -1,3 +1,7 @@
 *.class
 .metadata
 *~
+afw-wordcount/target
+azarea-cluster-framework
+test-classes
+azarea-wordcount/azarea

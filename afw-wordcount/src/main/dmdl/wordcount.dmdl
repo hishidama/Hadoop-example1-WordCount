@@ -1,4 +1,5 @@
 
+@directio.csv
 text_model = {
 	text : TEXT;
 };
@@ -7,6 +8,7 @@ word_model = {
 	word : TEXT;
 };
 
+@directio.csv
 summarized word_count_model = word_model => {
 	any   word -> word;
 	count word -> count;
